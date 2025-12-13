@@ -16,3 +16,4 @@ C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net10.0\ref\Je
 C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\bin\Debug\net10.0\Newtonsoft.Json.dll
 C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net10.0\JewelryNotice.csproj.AssemblyReference.cache
 C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net10.0\JewelryN.190D9EEE.Up2Date
+C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\bin\Debug\net10.0\Microsoft.Toolkit.Uwp.Notifications.dll

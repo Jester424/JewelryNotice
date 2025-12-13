@@ -7,6 +7,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 using Newtonsoft.Json;
+using Microsoft.Toolkit.Uwp.Notifications;
+
 
 namespace JewelryNotice
 {
@@ -14,13 +16,9 @@ namespace JewelryNotice
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello, world!");
             bool securityOffline = await CheckSecurity();
 
-            if (!securityOffline)
-            {
-                Console.WriteLine("Security is up");
-            }
+            ToastNotification(securityOffline);
         }
 
         private static async Task<bool> CheckSecurity()
@@ -39,6 +37,17 @@ namespace JewelryNotice
             return jewelryStore
                 .EnumerateArray()
                 .All(item => item.GetProperty("disabled").GetBoolean());
+        }
+
+        private static void ToastNotification(bool securityDown)
+        {
+            if (!securityDown)
+            {
+                new ToastContentBuilder()
+                    .AddText("Jewelry store security is down.")
+                    .AddText("Cluster ring is available to steal")
+                    .Show();
+            }
         }
     }
 }

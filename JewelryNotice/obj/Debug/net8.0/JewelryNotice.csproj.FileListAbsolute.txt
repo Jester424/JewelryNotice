@@ -1,0 +1,6 @@
+C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net8.0\JewelryNotice.csproj.AssemblyReference.cache
+C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net8.0\JewelryNotice.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net8.0\JewelryNotice.AssemblyInfoInputs.cache
+C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net8.0\JewelryNotice.AssemblyInfo.cs
+C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net8.0\JewelryNotice.csproj.CoreCompileInputs.cache
+C:\Users\nnico\source\repos\JewelryNotice\JewelryNotice\obj\Debug\net8.0\JewelryNotice.sourcelink.json
