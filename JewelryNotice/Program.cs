@@ -49,7 +49,9 @@ namespace JewelryNotice
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Loop error: {ex.Message}");
+                    _logger.LogError(
+                        "Loop error: {ex}",
+                        ex.Message);
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(10));
@@ -63,7 +65,9 @@ namespace JewelryNotice
             // If store security is offline and it wasn't on the last call, send toast notification
             if (securityOffline && _lastState != securityOffline)
             {
-                _logger.LogInformation($"Security state changed: {_lastState} > {securityOffline}");
+                _logger.LogInformation(
+                    "Security state changed: {OldState} > {NewState}",
+                    _lastState, securityOffline);
                 ToastNotification();
             }
             _lastState = securityOffline;
@@ -89,7 +93,9 @@ namespace JewelryNotice
                     .EnumerateArray()
                     .All(item => item.GetProperty("disabled").GetBoolean());
 
-                _logger.LogInformation($"Security status checked. Offline = {offline}");
+                _logger.LogInformation(
+                    "Security status checked. Offline = {offline}",
+                    offline);
 
                 return offline;
             }
