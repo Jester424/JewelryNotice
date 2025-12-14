@@ -26,7 +26,7 @@ namespace JewelryNotice
 
             bool securityOffline = await CheckSecurity(apiKey);
 
-            Console.WriteLine(securityOffline.ToString());
+            ToastNotification(securityOffline);
         }
 
         private static async Task<bool> CheckSecurity(string apiKey)
@@ -53,8 +53,8 @@ namespace JewelryNotice
             {
                 new ToastContentBuilder()
                     .AddText("Jewelry store security is down.")
-                    .AddText("Cluster ring is available to steal");
-                    //.Show();
+                    .AddText("Cluster ring is available to steal")
+                    .Show();
             }
         }
     }
