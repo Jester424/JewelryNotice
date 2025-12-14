@@ -72,6 +72,8 @@ namespace JewelryNotice
         {
             try
             {
+                _logger.LogDebug("Calling Torn shoplifting API");
+
                 string url = $"https://api.torn.com/torn/?selections=shoplifting&key={apiKey}";
 
                 string response = await _http.GetStringAsync(url);
@@ -82,13 +84,17 @@ namespace JewelryNotice
                     .GetProperty("shoplifting")
                     .GetProperty("jewelry_store");
 
-                return jewelryStore
+                bool offline = jewelryStore
                     .EnumerateArray()
                     .All(item => item.GetProperty("disabled").GetBoolean());
+
+                _logger.LogInformation($"Security status checked. Offline = {offline}");
+
+                return offline;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"CheckSecurity failed: {ex.Message}");
+                _logger.LogWarning(ex, "Unexpected failure while calling Torn API.");
                 return _lastState ?? false;
             }
         }
