@@ -16,14 +16,22 @@ namespace JewelryNotice
     {
         static async Task Main(string[] args)
         {
-            bool securityOffline = await CheckSecurity();
+            string apiKey = Environment.GetEnvironmentVariable("JewelryNoticeKey");
 
-            ToastNotification(securityOffline);
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                Console.WriteLine("API key not found. Set JewelryNoticeKey environmental variable.");
+                return;
+            }
+
+            bool securityOffline = await CheckSecurity(apiKey);
+
+            Console.WriteLine(securityOffline.ToString());
         }
 
-        private static async Task<bool> CheckSecurity()
+        private static async Task<bool> CheckSecurity(string apiKey)
         {
-            string url = "https://api.torn.com/torn/plR8x8N3ls16LX9k?selections=shoplifting&key=Dw88mnzdwKgRgHk8";
+            string url = "https://api.torn.com/torn/?selections=shoplifting&key=" + apiKey;
 
             using var client = new HttpClient();
             string response = await client.GetStringAsync(url);
@@ -45,8 +53,8 @@ namespace JewelryNotice
             {
                 new ToastContentBuilder()
                     .AddText("Jewelry store security is down.")
-                    .AddText("Cluster ring is available to steal")
-                    .Show();
+                    .AddText("Cluster ring is available to steal");
+                    //.Show();
             }
         }
     }
