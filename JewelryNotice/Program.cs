@@ -63,6 +63,7 @@ namespace JewelryNotice
             // If store security is offline and it wasn't on the last call, send toast notification
             if (securityOffline && _lastState != securityOffline)
             {
+                _logger.LogInformation($"Security state changed: {_lastState} > {securityOffline}");
                 ToastNotification();
             }
             _lastState = securityOffline;
