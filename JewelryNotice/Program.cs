@@ -45,7 +45,7 @@ namespace JewelryNotice
             {
                 try
                 {
-                    await MainLoop(apiKey);
+                    await PrimaryLoop(apiKey);
                 }
                 catch (Exception ex)
                 {
@@ -56,7 +56,7 @@ namespace JewelryNotice
             }
         }
 
-        private static async Task MainLoop(string apiKey)
+        private static async Task PrimaryLoop(string apiKey)
         {
             bool securityOffline = await CheckSecurity(apiKey);
 
