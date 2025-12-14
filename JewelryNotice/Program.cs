@@ -91,6 +91,7 @@ namespace JewelryNotice
         {
             bool securityOffline = await CheckSecurity(apiKey);
             _lastState = securityOffline;
+
             if (securityOffline)
             {
                 ToastNotification();
