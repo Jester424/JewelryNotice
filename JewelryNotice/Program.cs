@@ -24,21 +24,35 @@ namespace JewelryNotice
                 return;
             }
 
-            while (1 == 1)
+            await Startup(apiKey);
+
+            await Task.Delay(TimeSpan.FromSeconds(10));
+
+            while (true)
             {
-                MainLoop(apiKey);
-                Thread.Sleep(10000);
+                try
+                {
+                    await MainLoop(apiKey);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Loop error: {ex.Message}");
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(10));
             }
         }
 
         private static async Task MainLoop(string apiKey)
         {
             bool securityOffline = await CheckSecurity(apiKey);
-            if (_lastState != securityOffline)
+
+            // If store security is offline and it wasn't on the last call, send toast notification
+            if (securityOffline && _lastState != securityOffline)
             {
-                ToastNotification(securityOffline);
-                _lastState = securityOffline;
+                ToastNotification();
             }
+            _lastState = securityOffline;
         }
 
         private static async Task<bool> CheckSecurity(string apiKey)
@@ -66,15 +80,12 @@ namespace JewelryNotice
             }
         }
 
-        private static void ToastNotification(bool securityDown)
+        private static void ToastNotification()
         {
-            if (!securityDown)
-            {
-                new ToastContentBuilder()
-                    .AddText("Jewelry store security is down.")
-                    .AddText("Cluster ring is available to steal.")
-                    .Show();
-            }
+            new ToastContentBuilder()
+                .AddText("Jewelry store security is down.")
+                .AddText("Cluster ring is available to steal.")
+                .Show();
         }
 
         private static readonly HttpClient _http = new HttpClient()
@@ -83,5 +94,22 @@ namespace JewelryNotice
         };
 
         private static bool? _lastState = null;
+
+        private static async Task Startup(string apiKey)
+        {
+            bool securityOffline = await CheckSecurity(apiKey);
+            _lastState = securityOffline;
+            if (securityOffline)
+            {
+                ToastNotification();
+            }
+            else
+            {
+                new ToastContentBuilder()
+                    .AddText("API successfully called.")
+                    .AddText("Everything appears to be working correctly.")
+                    .Show();
+            }
+        }
     }
 }
