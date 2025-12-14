@@ -97,6 +97,16 @@ namespace JewelryNotice
 
                 return offline;
             }
+            catch (TaskCanceledException ex)
+            {
+                _logger.LogWarning(ex, "Torn API request timed out.");
+                return _lastState ?? false;
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "Invalid JSON returned from Torn API.");
+                return _lastState ?? false;
+            }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Unexpected failure while calling Torn API.");
