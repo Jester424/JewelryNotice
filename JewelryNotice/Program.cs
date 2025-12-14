@@ -36,32 +36,39 @@ namespace JewelryNotice
                 cts.Cancel();
             };
 
-            _logger.LogInformation("JewelryNotice starting up");
-
-            string apiKey = Environment.GetEnvironmentVariable("JewelryNoticeKey");
-
-            if (string.IsNullOrEmpty(apiKey))
+            try
             {
-                _logger.LogError("API key not found. Set JewelryNoticeKey environmental variable.");
-                return;
+                _logger.LogInformation("JewelryNotice starting up");
+
+                string apiKey = Environment.GetEnvironmentVariable("JewelryNoticeKey");
+
+                if (string.IsNullOrEmpty(apiKey))
+                {
+                    _logger.LogError("API key not found. Set JewelryNoticeKey environmental variable.");
+                    return;
+                }
+
+                await Startup(apiKey);
+
+                await Task.Delay(TimeSpan.FromSeconds(10));
+
+                while (!cts.Token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        await PrimaryLoop(apiKey);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Unhandled exception in primary loop");
+                    }
+
+                    await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
+                }
             }
-
-            await Startup(apiKey);
-
-            await Task.Delay(TimeSpan.FromSeconds(10));
-
-            while (!cts.Token.IsCancellationRequested)
+            finally
             {
-                try
-                {
-                    await PrimaryLoop(apiKey);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Unhandled exception in primary loop");
-                }
-
-                await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
+                _logger.LogInformation("JewelryNotice shut down cleanly.");
             }
         }
 
