@@ -68,7 +68,7 @@ namespace JewelryNotice
             catch (Exception ex)
             {
                 Console.WriteLine($"CheckSecurity failed: {ex.Message}");
-                throw;
+                return _lastState ?? false;
             }
         }
 
