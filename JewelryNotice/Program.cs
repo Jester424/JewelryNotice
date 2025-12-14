@@ -93,7 +93,7 @@ namespace JewelryNotice
                     .EnumerateArray()
                     .All(item => item.GetProperty("disabled").GetBoolean());
 
-                _logger.LogInformation(
+                _logger.LogDebug(
                     "Security status checked. Offline = {offline}",
                     offline);
 
