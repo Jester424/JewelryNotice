@@ -49,9 +49,7 @@ namespace JewelryNotice
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(
-                        "Loop error: {ex}",
-                        ex.Message);
+                    _logger.LogError(ex, "Unhandled exception in primary loop");
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(10));
