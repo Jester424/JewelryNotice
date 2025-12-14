@@ -6,6 +6,13 @@ namespace JewelryNotice
 {
     class Program
     {
+        private static readonly HttpClient _http = new HttpClient()
+        {
+            Timeout = TimeSpan.FromSeconds(5)
+        };
+
+        private static bool? _lastState = null;
+
         static async Task Main(string[] args)
         {
             string apiKey = Environment.GetEnvironmentVariable("JewelryNoticeKey");
@@ -79,13 +86,6 @@ namespace JewelryNotice
                 .AddText("Cluster ring is available to steal.")
                 .Show();
         }
-
-        private static readonly HttpClient _http = new HttpClient()
-        {
-            Timeout = TimeSpan.FromSeconds(5)
-        };
-
-        private static bool? _lastState = null;
 
         private static async Task Startup(string apiKey)
         {
