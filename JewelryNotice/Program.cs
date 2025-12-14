@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using Microsoft.Toolkit.Uwp.Notifications;
 
 
@@ -6,6 +7,8 @@ namespace JewelryNotice
 {
     class Program
     {
+        private static ILogger<Program> _logger;
+
         private static readonly HttpClient _http = new HttpClient()
         {
             Timeout = TimeSpan.FromSeconds(5)
@@ -15,6 +18,17 @@ namespace JewelryNotice
 
         static async Task Main(string[] args)
         {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .SetMinimumLevel(LogLevel.Information)    
+                    .AddConsole();
+            });
+
+            _logger = loggerFactory.CreateLogger<Program>();
+
+            _logger.LogInformation("JewelryNotice starting up");
+
             string apiKey = Environment.GetEnvironmentVariable("JewelryNoticeKey");
 
             if (string.IsNullOrEmpty(apiKey))
