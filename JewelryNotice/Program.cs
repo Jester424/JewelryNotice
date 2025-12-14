@@ -34,7 +34,11 @@ namespace JewelryNotice
         private static async Task MainLoop(string apiKey)
         {
             bool securityOffline = await CheckSecurity(apiKey);
-            ToastNotification(securityOffline);
+            if (_lastState != securityOffline)
+            {
+                ToastNotification(securityOffline);
+                _lastState = securityOffline;
+            }
         }
 
         private static async Task<bool> CheckSecurity(string apiKey)
@@ -77,5 +81,7 @@ namespace JewelryNotice
         {
             Timeout = TimeSpan.FromSeconds(5)
         };
+
+        private static bool? _lastState = null;
     }
 }
