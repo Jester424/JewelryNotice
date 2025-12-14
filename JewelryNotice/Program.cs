@@ -49,7 +49,7 @@ namespace JewelryNotice
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Loop error: {ex.Message}");
+                    _logger.LogError($"Loop error: {ex.Message}");
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(10));
