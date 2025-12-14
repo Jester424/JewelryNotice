@@ -24,27 +24,42 @@ namespace JewelryNotice
                 return;
             }
 
-            bool securityOffline = await CheckSecurity(apiKey);
+            while (1 == 1)
+            {
+                MainLoop(apiKey);
+                Thread.Sleep(10000);
+            }
+        }
 
+        private static async Task MainLoop(string apiKey)
+        {
+            bool securityOffline = await CheckSecurity(apiKey);
             ToastNotification(securityOffline);
         }
 
         private static async Task<bool> CheckSecurity(string apiKey)
         {
-            string url = "https://api.torn.com/torn/?selections=shoplifting&key=" + apiKey;
+            try
+            {
+                string url = $"https://api.torn.com/torn/?selections=shoplifting&key={apiKey}";
 
-            using var client = new HttpClient();
-            string response = await client.GetStringAsync(url);
+                string response = await _http.GetStringAsync(url);
 
-            using var doc = JsonDocument.Parse(response);
+                using var doc = JsonDocument.Parse(response);
 
-            var jewelryStore = doc.RootElement
-                .GetProperty("shoplifting")
-                .GetProperty("jewelry_store");
+                var jewelryStore = doc.RootElement
+                    .GetProperty("shoplifting")
+                    .GetProperty("jewelry_store");
 
-            return jewelryStore
-                .EnumerateArray()
-                .All(item => item.GetProperty("disabled").GetBoolean());
+                return jewelryStore
+                    .EnumerateArray()
+                    .All(item => item.GetProperty("disabled").GetBoolean());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"CheckSecurity failed: {ex.Message}");
+                throw;
+            }
         }
 
         private static void ToastNotification(bool securityDown)
@@ -53,9 +68,14 @@ namespace JewelryNotice
             {
                 new ToastContentBuilder()
                     .AddText("Jewelry store security is down.")
-                    .AddText("Cluster ring is available to steal")
+                    .AddText("Cluster ring is available to steal.")
                     .Show();
             }
         }
+
+        private static readonly HttpClient _http = new HttpClient()
+        {
+            Timeout = TimeSpan.FromSeconds(5)
+        };
     }
 }
