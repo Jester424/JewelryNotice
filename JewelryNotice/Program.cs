@@ -33,7 +33,7 @@ namespace JewelryNotice
 
             if (string.IsNullOrEmpty(apiKey))
             {
-                Console.WriteLine("API key not found. Set JewelryNoticeKey environmental variable.");
+                _logger.LogError("API key not found. Set JewelryNoticeKey environmental variable.");
                 return;
             }
 
