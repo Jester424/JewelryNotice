@@ -27,6 +27,15 @@ namespace JewelryNotice
 
             _logger = loggerFactory.CreateLogger<Program>();
 
+            using var cts = new CancellationTokenSource();
+
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                _logger.LogInformation("Ctrl+C received. Beginning graceful shutdown...");
+                e.Cancel = true;
+                cts.Cancel();
+            };
+
             _logger.LogInformation("JewelryNotice starting up");
 
             string apiKey = Environment.GetEnvironmentVariable("JewelryNoticeKey");
@@ -41,7 +50,7 @@ namespace JewelryNotice
 
             await Task.Delay(TimeSpan.FromSeconds(10));
 
-            while (true)
+            while (!cts.Token.IsCancellationRequested)
             {
                 try
                 {
@@ -52,7 +61,7 @@ namespace JewelryNotice
                     _logger.LogError(ex, "Unhandled exception in primary loop");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
             }
         }
 
