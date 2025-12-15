@@ -120,10 +120,15 @@ namespace JewelryNotice
 
                 return offline;
             }
-            catch (TaskCanceledException ex)
+            catch (TaskCanceledException ex) when (!token.IsCancellationRequested)
             {
                 _logger.LogWarning(ex, "Torn API request timed out.");
                 return _lastState ?? false;
+            }
+            catch (TaskCanceledException) when (token.IsCancellationRequested)
+            {
+                // expected - do not log
+                throw;
             }
             catch (JsonException ex)
             {
