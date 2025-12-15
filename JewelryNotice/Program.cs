@@ -48,15 +48,15 @@ namespace JewelryNotice
                     return;
                 }
 
-                await Startup(apiKey);
+                await Startup(apiKey, cts.Token);
 
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
 
                 while (!cts.Token.IsCancellationRequested)
                 {
                     try
                     {
-                        await PrimaryLoop(apiKey);
+                        await PrimaryLoop(apiKey, cts.Token);
                     }
                     catch (Exception ex)
                     {
@@ -72,9 +72,9 @@ namespace JewelryNotice
             }
         }
 
-        private static async Task PrimaryLoop(string apiKey)
+        private static async Task PrimaryLoop(string apiKey, CancellationToken token)
         {
-            bool securityOffline = await CheckSecurity(apiKey);
+            bool securityOffline = await CheckSecurity(apiKey, token);
 
             // If store security is offline and it wasn't on the last call, send toast notification
             if (securityOffline && _lastState != securityOffline)
@@ -87,7 +87,7 @@ namespace JewelryNotice
             _lastState = securityOffline;
         }
 
-        private static async Task<bool> CheckSecurity(string apiKey)
+        private static async Task<bool> CheckSecurity(string apiKey, CancellationToken token)
         {
             try
             {
@@ -138,9 +138,9 @@ namespace JewelryNotice
                 .Show();
         }
 
-        private static async Task Startup(string apiKey)
+        private static async Task Startup(string apiKey, CancellationToken token)
         {
-            bool securityOffline = await CheckSecurity(apiKey);
+            bool securityOffline = await CheckSecurity(apiKey, token);
             _lastState = securityOffline;
 
             if (securityOffline)
