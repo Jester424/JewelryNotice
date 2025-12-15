@@ -102,7 +102,7 @@ namespace JewelryNotice
 
                 string url = $"https://api.torn.com/torn/?selections=shoplifting&key={apiKey}";
 
-                string response = await _http.GetStringAsync(url);
+                string response = await _http.GetStringAsync(url, token);
 
                 using var doc = JsonDocument.Parse(response);
 
