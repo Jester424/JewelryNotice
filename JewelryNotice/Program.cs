@@ -57,14 +57,21 @@ namespace JewelryNotice
                     try
                     {
                         await PrimaryLoop(apiKey, cts.Token);
+                        await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
+                    }
+                    catch (TaskCanceledException) when (cts.Token.IsCancellationRequested)
+                    {
+                        break;
                     }
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Unhandled exception in primary loop");
                     }
-
-                    await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
                 }
+            }
+            catch (TaskCanceledException) when (cts.Token.IsCancellationRequested)
+            {
+                // expected
             }
             finally
             {
