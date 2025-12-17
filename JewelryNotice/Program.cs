@@ -31,7 +31,7 @@ namespace JewelryNotice
 
             Console.CancelKeyPress += (sender, e) =>
             {
-                _logger.LogInformation("Ctrl+C received. Beginning graceful shutdown...");
+                _logger.LogInformation("Ctrl+C received. Beginning graceful shutdown..."); 
                 e.Cancel = true;
                 cts.Cancel();
             };
